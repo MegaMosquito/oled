@@ -4,6 +4,8 @@ LOCAL_DEFAULT_ROUTE     := $(shell sh -c "ip route | grep default")
 LOCAL_ROUTER_ADDRESS    := $(word 3, $(LOCAL_DEFAULT_ROUTE))
 LOCAL_IP_ADDRESS        := $(word 7, $(LOCAL_DEFAULT_ROUTE))
 
+all: build run
+
 build:
 	-docker build -t oled . 
 

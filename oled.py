@@ -17,7 +17,7 @@ LOCAL_IP_ADDRESS      = os.environ['LOCAL_IP_ADDRESS']
 # Commands to check LAN, WAN, etc.
 LAN_COMMAND = 'curl -sS https://' + LOCAL_ROUTER_ADDRESS + ' 2>/dev/null | wc -l'
 WAN_COMMAND = 'curl -sS https://google.com 2>/dev/null | wc -l'
-UPTIME_COMMAND = 'uptime | sed "s/.*up  /up /;s/,  load average: / (/;s/,.*/)/"'
+UPTIME_COMMAND = 'uptime | sed "s/.*up +/up /;s/, +load average: +/ (/;s/,.*/)/"'
 
 # Define the Reset Pin
 oled_reset = digitalio.DigitalInOut(board.D4)
