@@ -21,8 +21,7 @@
 
 #define INTERNET_TARGET "google.com"
 #define UTC_TIME_COMMAND "sh -c \"date -u | awk '{printf \\\"UTC: %s\\\", \\$4}'\""
-#define UPTIME_COMMAND   "sh -c \"uptime | awk '{printf \\\"up: %s avg %.2f\\\", \\$3, \\$(NF-2)}'\""
-
+#define UPTIME_COMMAND   "sh -c \"uptime | sed 's/.*  *up  */up /;s/,.*average:  */zzz/;s/,.*//;s/zzz/, avg /' | tr -d '\n'\" 2>/dev/null"
 
 
 static volatile int loop = 1;
