@@ -1,5 +1,5 @@
-"""
-"""
+#  oled.py  Display useful info on 0.96" OLED display
+#  Written by mosquito@darlingevil.com, 2019-11-15
 
 import os
 import time
