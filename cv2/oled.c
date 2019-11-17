@@ -152,7 +152,7 @@ int main(int argc, char* argv[]) {
 
     (void) snprintf(line, SIZE_LINE - 1, SPACES);
     for (;i < 8; i++) {
-      centerString(l++, line);
+      centerString(i, line);
     }
 
     sleep(SLEEP_SEC);
