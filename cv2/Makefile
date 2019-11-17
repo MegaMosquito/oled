@@ -27,4 +27,7 @@ run:
             --net=host -v /usr:/usr2 \
             oled
 
-
+IMAGE := ibmosquito/oled:1.0.0
+publish:
+	docker build -t $(IMAGE) .
+	docker push $(IMAGE)
