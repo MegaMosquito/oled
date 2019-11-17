@@ -8,7 +8,9 @@ This repo contains three different approaches for writing info to the 0.96" OLED
 
 Each of these provides various bits of information about its host, but the latter provides the most. All of them provide the IPv4 address of the default host interface, "live" gateway and internet connectivity status, "live" UTC time, and "live" uptime, and load average.
 
-The latter however also provides "live" Open-Horizon status (whether it is installed, what is the sonfigstate.state of the node, and policy or pattern registration details. All of this Open-Horizon info is updated dynamically ever 2 seconds.
+The latter however also provides "live" Open-Horizon status (whether it is installed, what is the sonfigstate.state of the node, and policy or pattern registration details. All of this Open-Horizon info is updated dynamically ever 2 seconds. Some example screenshots are shown below:
+
+![screenshots][https://raw.githubusercontent.com/MegaMosquito/oled/master/cv2.png]
 
 Usage:
 
