@@ -1,8 +1,6 @@
 
-# Some bits from https://github.com/MegaMosquito/netstuff/blob/master/Makefile
-LOCAL_DEFAULT_ROUTE     := $(shell sh -c "ip route | grep default")
-LOCAL_ROUTER_ADDRESS    := $(word 3, $(LOCAL_DEFAULT_ROUTE))
-LOCAL_IP_ADDRESS        := $(word 7, $(LOCAL_DEFAULT_ROUTE))
+LOCAL_ROUTER_ADDRESS    := $(shell netstat -r | egrep default | head -1 | awk '{ print $$2 }')
+LOCAL_IP_ADDRESS        := $(shell hostname -I | awk '{ print $$1 }')
 
 all: build run
 
