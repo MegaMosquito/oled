@@ -151,8 +151,8 @@ int main(int argc, char* argv[]) {
 #   pragma GCC diagnostic pop
 
     (void) snprintf(line, SIZE_LINE - 1, SPACES);
-    for (;i < 8; i++) {
-      centerString(i, line);
+    for (;l < 8; i++) {
+      centerString(l, line);
     }
 
     sleep(SLEEP_SEC);
