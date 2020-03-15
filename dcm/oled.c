@@ -27,15 +27,17 @@ shell_run(char* cmd, char* output, int size)
   FILE *fp;
 
   if ((fp = (FILE*) popen(cmd, "r")) != NULL) {
-    int length = 0;
-    while (fgets(output + length, size - length - 1, fp) != NULL) {
-      int n = strlen(output + length);
-      length += n;
-    }
-    pclose(fp);
-    if (length > 0) {
-      output[length] = '\0';
-      return 0;
+    char buf[BUFSIZ];
+    int length=0;
+
+    if (fgets(buf, BUFSIZ, fp) != NULL) {
+      pclose(fp);
+      length = strlen(buf);
+      if (length > 0 && length < size) {
+        (void) bzero(output,length);
+        (void) bcopy(buf,output,length-1);
+        return 0;
+      }
     }
   }
   return -1;
@@ -44,42 +46,57 @@ shell_run(char* cmd, char* output, int size)
 int
 oled_center_small(int line, char* message)
 {
-  char tmp[BUFSIZ];
-  char* padding = "";
-  int count = (OLED_SMALL_CHARS - strlen(message)) / 2;
+  int len = strlen(message);
 
-  if (count > 0 && count < (OLED_SMALL_CHARS - 1)) padding = &(OLED_SMALL_SPACES[OLED_SMALL_CHARS - count]);
-  (void) snprintf(tmp, BUFSIZ, "%s%s%s", padding, message, OLED_SMALL_SPACES);
-  oledWriteString(0, line, tmp, FONT_SMALL);
-  return(1);
+  if (len <= OLED_SMALL_CHARS) {
+    char tmp[BUFSIZ];
+    char* padding = "";
+    int half = (OLED_SMALL_CHARS - strlen(message)) / 2;
+
+    if (half > 0 && half < (OLED_SMALL_CHARS - 1)) padding = &(OLED_SMALL_SPACES[OLED_SMALL_CHARS - half]);
+    (void) snprintf(tmp, BUFSIZ, "%s%s%s", padding, message, OLED_SMALL_SPACES);
+    oledWriteString(0, line, tmp, FONT_SMALL);
+    return(1);
+  }
+  return(0);
 }
+
 
 int
 oled_center_normal(int line, char* message)
 {
-  char tmp[BUFSIZ];
-  char* padding = "";
-  int count = (OLED_NORMAL_CHARS - strlen(message)) / 2;
+  int len = strlen(message);
 
-  if (count > 0 && count < (OLED_NORMAL_CHARS - 1)) padding = &(OLED_SMALL_SPACES[OLED_NORMAL_CHARS - count]);
-  (void) snprintf(tmp, BUFSIZ, "%s%s%s", padding, message, OLED_SMALL_SPACES);
-  oledWriteString(0, line, tmp, FONT_NORMAL);
-  return(1);
+  if (len <= OLED_NORMAL_CHARS) {
+    char tmp[BUFSIZ];
+    char* padding = "";
+    int half = (OLED_NORMAL_CHARS - strlen(message)) / 2;
+
+    if (half > 0 && half < (OLED_NORMAL_CHARS - 1)) padding = &(OLED_NORMAL_SPACES[OLED_NORMAL_CHARS - half]);
+    (void) snprintf(tmp, BUFSIZ, "%s%s%s", padding, message, OLED_NORMAL_SPACES);
+    oledWriteString(0, line, tmp, FONT_NORMAL);
+    return(1);
+  }
+  return(0);
 }
 
 int
 oled_center_big(int line, char* message)
 {
-  char tmp[BUFSIZ];
-  char* padding = "";
-  int count = (OLED_BIG_CHARS - strlen(message)) / 2;
+  int len = strlen(message);
 
-  if (count > 0 && count < (OLED_BIG_CHARS - 1)) padding = &(OLED_SMALL_SPACES[OLED_BIG_CHARS - count]);
-  (void) snprintf(tmp, BUFSIZ, "%s%s%s", padding, message, OLED_SMALL_SPACES);
-  oledWriteString(0, line, tmp, FONT_BIG);
-  return(3);
+  if (len <= OLED_BIG_CHARS) {
+    char tmp[BUFSIZ];
+    char* padding = "";
+    int half = (OLED_BIG_CHARS - strlen(message)) / 2;
+
+    if (half > 0 && half < (OLED_BIG_CHARS - 1)) padding = &(OLED_BIG_SPACES[OLED_BIG_CHARS - half]);
+    (void) snprintf(tmp, BUFSIZ, "%s%s%s", padding, message, OLED_BIG_SPACES);
+    oledWriteString(0, line, tmp, FONT_BIG);
+    return(1);
+  }
+  return(0);
 }
-
 
 int
 oled_init()
@@ -138,18 +155,18 @@ main(int argc, char* argv[])
     (void) snprintf(line, OLED_LINE_SIZE - 1, nodename);
     k = oled_center_normal(l, line); l += k;
 
-    (void) snprintf(line, OLED_LINE_SIZE - 1, arch);
-    k = oled_center_small(l, line); l += k;
-
     (void) snprintf(line, OLED_LINE_SIZE - 1, getenv("LOCAL_IP_ADDRESS"));
-    k = oled_center_small(l, line); l += k;
+    k = oled_center_normal(l, line); l += k;
 
     shell_run("date -u +%TZ",buf,BUFSIZ);
     (void) snprintf(line, OLED_LINE_SIZE - 1, buf);
-    k = oled_center_normal(l, line); l += k;
+    k = oled_center_small(l, line); l += k;
 
     shell_run("uptime | awk -F: '{ print $5 }'",buf,BUFSIZ);
     (void) snprintf(line, OLED_LINE_SIZE - 1, buf);
+    k = oled_center_small(l, line); l += k;
+
+    (void) snprintf(line, OLED_LINE_SIZE - 1, arch);
     k = oled_center_small(l, line); l += k;
 
     for (;l < 8; l++) {
