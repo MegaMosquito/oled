@@ -8,11 +8,14 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
+#include <linux/kernel.h>
+#include <sys/sysinfo.h>
 
 #include "oled96.h"
 
-#define SLEEP_SEC 2
+#define SLEEP_SEC 15
 #define OLED_SMALL_CHARS 21
 #define OLED_NORMAL_CHARS 16
 #define OLED_BIG_CHARS 8
@@ -129,6 +132,15 @@ intHandler(int sig)
   loop = 0;
 }
 
+long
+get_uptime()
+{
+  struct sysinfo s_info;
+
+  (void) sysinfo(&s_info);
+
+  return s_info.uptime;
+}
 
 int
 main(int argc, char* argv[])
@@ -152,16 +164,25 @@ main(int argc, char* argv[])
   while(loop) {
     int k,l = 0;
 
+    /* name */
     (void) snprintf(line, OLED_LINE_SIZE - 1, nodename);
     k = oled_center_normal(l, line); l += k;
 
+    /* host ipaddr */
     (void) snprintf(line, OLED_LINE_SIZE - 1, getenv("LOCAL_IP_ADDRESS"));
     k = oled_center_normal(l, line); l += k;
 
-    shell_run("date -u +%TZ",buf,BUFSIZ);
+    /* current time (ZULU) */
+    shell_run("date -u '+%T UTC'",buf,BUFSIZ);
     (void) snprintf(line, OLED_LINE_SIZE - 1, buf);
     k = oled_center_small(l, line); l += k;
 
+    /* uptime */
+    int since=get_uptime();
+    (void) snprintf(line, OLED_LINE_SIZE - 1, "Up: %d sec", since);
+    k = oled_center_small(l, line); l += k;
+
+    /* load average */
     shell_run("uptime | awk -F: '{ print $5 }'",buf,BUFSIZ);
     (void) snprintf(line, OLED_LINE_SIZE - 1, buf);
     k = oled_center_small(l, line); l += k;

@@ -3,6 +3,7 @@ FROM arm32v6/alpine:3.10
 RUN apk add --update \
   gcc \
   musl-dev \
+  dateutils \
   linux-headers \
   && rm -rf /var/cache/apk/*
 
