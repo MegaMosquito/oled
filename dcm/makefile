@@ -25,7 +25,7 @@ run: remove build
           ${USER}/oled:${VERSION}
 
 build:
-	docker build -t oled .
+	docker build -t ${USER}/oled:${VERSION} .
 
 push: build
 	docker push ${USER}/oled:${VERSION}
