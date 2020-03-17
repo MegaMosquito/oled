@@ -175,15 +175,15 @@ main(int argc, char* argv[])
     /* current time (ZULU) */
     shell_run("date -u '+%T UTC'",buf,BUFSIZ);
     (void) snprintf(line, OLED_LINE_SIZE - 1, buf);
-    k = oled_center_small(l, line); l += k;
+    k = oled_center_normal(l, line); l += k;
 
     /* uptime */
     int since=get_uptime();
-    (void) snprintf(line, OLED_LINE_SIZE - 1, "Up: %d sec", since);
-    k = oled_center_small(l, line); l += k;
+    (void) snprintf(line, OLED_LINE_SIZE - 1, "UP: %d", since);
+    k = oled_center_normal(l, line); l += k;
 
     /* load average */
-    shell_run("uptime | awk -F: '{ print $5 }'",buf,BUFSIZ);
+    shell_run("awk '{ print $1,$2,$3 }' /proc/loadavg",buf,BUFSIZ);
     (void) snprintf(line, OLED_LINE_SIZE - 1, buf);
     k = oled_center_small(l, line); l += k;
 
