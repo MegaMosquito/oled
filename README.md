@@ -1,26 +1,73 @@
-# oled
+# &#9114; - `oled`
+Display information on an OLED serial connected `I2C` device in three text sizes and two colors.
 
-This repo contains three different approaches for writing info to the 0.96" OLED display in the subdirectories listed below:
+2. Use `raspi-config` to enable `I2C` interface
+3. Install `docker` and `git`
+4. Clone this repository
+5. Change directory and run `make`
+6. Connect display using female-to-female GPIO jumper cables
 
-1. "python" a python version, simplest, 110MB container, 6 lines of 20 chars
-2. "cv1" a C version, 6.6MB container, 1 font, 3 lines of 16 chars
-3. "cv2" a better C version, 6.1MB container, 3 fonts, 8 lines of 21 chars
+Original written by mosquito@darlingevil.com
 
-Each of these provides various bits of information about its host, but the latter provides the most. All of them provide the IPv4 address of the default host interface, "live" gateway and internet connectivity status, "live" UTC time, and "live" uptime, and load average.
+## Parts
 
-The latter however also provides "live" Open-Horizon status (whether it is installed, what is the `configstate.state` of the node, and policy or pattern registration details. All of this Open-Horizon info is updated dynamically ever 2 seconds. An example screenshot is shown below:
++ RaspberryPi Model 3/4
++ 128x64 pixel, 0.96", yellow/blue `I2C` [OLED display](https://www.amazon.com/gp/product/B07WPCPM5H/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1)
++ Female-Female `GPIO` [cables](https://www.amazon.com/gp/product/B072L1XMJR/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1)
 
-![](https://raw.githubusercontent.com/MegaMosquito/oled/master/cv2.png)
-![](https://www.raspberrypi-spy.co.uk/wp-content/uploads/2012/06/raspberry_pi_3_model_b_plus_gpio.jpg)
+<img src="docs/iic-oled-ssd1306.png" width="50%">
 
-Usage:
+## Step 1 - Enable `I2C` interface
+The serial connection may need to be enabled; use the `raspi-config` command-line program; for example:
 
-- install an I2C OLED display (wired to +3.3V, GND, SDA, and SCL)
-- use raspi-config to enable I2C interface
-- install docker and git
-- git clone this repo, and cd into it
-- cd into the implementation subdirectory of your choice, e.g., "cd cv2"
-- run "make"
+```
+% sudo raspi-config
+```
 
-2019-11-15
-Written by mosquito@darlingevil.com
+A terminal-based interface will launch and provide menu options to enable the `I2C` interface; for example:
+
+<img src="docs/raspi-config-i2c.png" width="75%">
+
+## Step 2 - Configuration
+The indicated display supports up to eight (8) _lines_ of text, in three fonts and two colors.  The first two _lines_ of text are yellow and the last six _lines_ are blue.
+
++ `SMALL` - 8 lines; 20 characters/line
++ `NORMAL` - 8 lines; 16 characters/line
++ `BIG` - consumes 3 lines; 8 characters
+
+The information displayed is dependent on the configuration options; the default:
+
++ `display` - one of `default`, `horizon`, `custom`
++ `messages[]` - array of _dict_ for `custom` _display_
+ + `font` - font of message
+ + `line` - starting line
+ + `text` - text to display
+ + `align` - alignment, `left`, `center`, `right`; default: `center`
+
+### `default` _display_
+This information includes:
+
++ device _name_
++ TCP/IPv4 address
++ time in UTC
++ uptime in seconds
++ 1, 5, 15, load average
++ architecture (e.g. `armv7l`)
+
+<img src="docs/sample.png" width="50%">
+
+## Step 3 - Connection
+The specified display connects to the `GPIO` pins on the RaspberryPi model 3 and 4 using the four (4) pins on the back of the display; these pins are:
+
++ `VCC` - 3.3V current; _recommended_ `PIN1`
++ `SDA` - serial data; **required** `PIN3`
++ `SCL` - serial clock; **required** `PIN5`
++ `GND` - ground; _recommended_ `PIN9`
+
+<img src="docs/connection.png" width="50%">
+
+### GPIO Reference
+<img src="https://www.raspberrypi-spy.co.uk/wp-content/uploads/2012/06/raspberry_pi_3_model_b_plus_gpio.jpg" width="50%">
+
+
+
