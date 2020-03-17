@@ -1,11 +1,11 @@
 # &#9114; - `oled`
-Display information on an OLED display in three text sizes and two colors.
+Display information on an OLED serial connected `I2C` device in three text sizes and two colors.
 
-1. Connect display using female-to-female GPIO jumper cables
 2. Use `raspi-config` to enable `I2C` interface
 3. Install `docker` and `git`
 4. Clone this repository
 5. Change directory and run `make`
+6. Connect display using female-to-female GPIO jumper cables
 
 Original written by mosquito@darlingevil.com
 
@@ -14,6 +14,8 @@ Original written by mosquito@darlingevil.com
 + RaspberryPi Model 3/4
 + 128x64 pixel, 0.96", yellow/blue `I2C` [OLED display](https://www.amazon.com/gp/product/B07WPCPM5H/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1)
 + Female-Female `GPIO` [cables](https://www.amazon.com/gp/product/B072L1XMJR/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1)
+
+<img src="docs/iic-oled-ssd1306.png" width="50%">
 
 ## Step 1 - Enable `I2C` interface
 The serial connection may need to be enabled; use the `raspi-config` command-line program; for example:
