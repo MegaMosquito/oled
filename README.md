@@ -67,7 +67,4 @@ The specified display connects to the `GPIO` pins on the RaspberryPi model 3 and
 <img src="docs/connection.png" width="50%">
 
 ### GPIO Reference
-<img src="https://www.raspberrypi-spy.co.uk/wp-content/uploads/2012/06/raspberry_pi_3_model_b_plus_gpio.jpg" width="50%">
-
-
-
+<img src="docs/rpi-gpio.png" width="50%">
