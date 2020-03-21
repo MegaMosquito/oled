@@ -1,11 +1,11 @@
 # &#x1F321; - `flir`
-Display information on an OLED serial connected `I2C` device in three text sizes and two colors.
+Perform facial detection and provide thermal measurement for humans.
 
 2. Use `raspi-config` to enable `I2C` interface
+6. Connect display, camera, and thermal sensor
 3. Install `docker` and `git`
 4. Clone this repository
 5. Change directory and run `make`
-6. Connect display, camera, and thermal sensor
 
 ## Parts
 
@@ -31,7 +31,7 @@ A terminal-based interface will launch and provide menu options to enable the `I
 <img src="docs/raspi-config-i2c.png" width="75%">
 
 ## Step 2 - Connect IR sensor
-The thermal sensor connects to the `GPIO` pins on the RaspberryPi model 3 and 4 using the `STEMMA` cable to four (4) GPIO pins; these cable-pin connections are:
+The thermal sensor connects to the `GPIO` pins on the RaspberryPi using a `STEMMA` cable to four (4) GPIO pins; these cable-pin connections are:
 
 + `VCC` - **RED** - 3.3V current; _recommended_ `PIN1`
 + `SDA` - **BLUE** - serial data; **required** `PIN3`
@@ -40,11 +40,12 @@ The thermal sensor connects to the `GPIO` pins on the RaspberryPi model 3 and 4 
 
    
 ##  Step 3 - Connect OLED display connection
+The OLED display connects to the `GPIO` pins on the RaspberryPi using the provided cable.
 
 Raspberry Pi|PIN|Color|LCD|
 ---|---|---|---|
-3V|1|RED|VCC|	
-GND|6|BLACK|GND|
+3V|17|RED|VCC|	
+GND|20|BLACK|GND|
 MOSI|18|BLUE|DIN|	
 SCLK|19|YELLOW|CLK|	
 CE0|24|ORANGE|CS|	
